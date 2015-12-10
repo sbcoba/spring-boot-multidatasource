@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>org.sbcoba.springboot</groupId>
+	<artifactId>spring-boot-multidatasource-build</artifactId>
+	<version>0.3.0.BUILD-SNAPSHOT</version>
+	<packaging>pom</packaging>
+	<name>spring-boot-multidatasource-build</name>
+	<description>Spring Boot Multi Datasource</description>
+	<url>https://github.com/sbcoba</url>
+	<organization>
+		<name>Lee su hong</name>
+		<url>https://github.com/sbcoba</url>
+	</organization>
+	<licenses>
+		<license>
+			<name>Apache License, Version 2.0</name>
+			<url>http://www.apache.org/licenses/LICENSE-2.0</url>
+		</license>
+	</licenses>
+	<developers>
+		<developer>
+			<id>sbcoba</id>
+			<name>Lee su hong</name>
+			<email>sbcoba@gmail.com</email>
+			<roles>
+				<role>Project Lead</role>
+			</roles>
+		</developer>
+	</developers>
+	<prerequisites>
+		<maven>3.2.1</maven>
+	</prerequisites>
+	<properties>
+		<main.basedir>${basedir}</main.basedir>
+	</properties>
+	<profiles>
+		<profile>
+			<id>default</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+			<modules>
+				<module>spring-boot-multidatasource-parent</module>
+				<module>spring-boot-multidatasource</module>
+				<module>spring-boot-multidatasource-sample</module>
+			</modules>
+		</profile>
+	</profiles>
+</project>

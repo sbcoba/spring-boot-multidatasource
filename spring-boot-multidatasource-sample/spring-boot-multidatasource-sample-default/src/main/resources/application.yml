@@ -1,0 +1,30 @@
+spring:
+  h2:
+    console: 
+      path: /console
+      enabled: true
+
+  multi-datasource:
+    basePackages: org.sbcoba.springboot.multidatasource.sample.service
+    default-datasource-name: dev
+    datasources:
+      dev:
+        url: jdbc:h2:~/dev;
+        data: classpath:devData.sql
+      test:
+        url: jdbc:h2:~/test;
+        data: classpath:testData.sql
+      staging:
+        url: jdbc:h2:~/staging;
+        data: classpath:stagingData.sql
+      prod:
+        url: jdbc:h2:~/prod;
+        data: classpath:prodData.sql
+
+logging:
+  level:
+    org.springframework:
+      boot: DEBUG
+      transaction: DEBUG
+    org.sbcoba.springboot.multidatasource: DEBUG
+
