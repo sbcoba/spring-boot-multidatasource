@@ -25,6 +25,7 @@ import java.util.Map;
 import static org.junit.runners.Parameterized.*;
 import static org.hamcrest.core.StringStartsWith.startsWith;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 //@RunWith(SpringJUnit4ClassRunner.class)
@@ -57,30 +58,30 @@ public class MultiDataSourceTests {
     @Parameters(name = "testType [{0}], methodName [{1}], dataSourceName [{2}]")
     public static String[][] datasourceData() {
         return new String[][] {
-                { "default", "dev", "dev" },
-                { "default", "test", "dev" },
-                { "default", "staging", "dev" },
-                { "default", "prod", "dev" },
+                { "default", "db1", "db1" },
+                { "default", "db2", "db1" },
+                { "default", "db3", "db1" },
+                { "default", "db4", "db1" },
 
-                { "method", "dev", "dev" },
-                { "method", "test", "test" },
-                { "method", "staging", "staging" },
-                { "method", "prod", "prod" },
+                { "method", "db1", "db1" },
+                { "method", "db2", "db2" },
+                { "method", "db3", "db3" },
+                { "method", "db4", "db4" },
 
-                { "custom", "dev", "dev" },
-                { "custom", "test", "test" },
-                { "custom", "staging", "staging" },
-                { "custom", "prod", "prod" },
+                { "custom", "db1", "db1" },
+                { "custom", "db2", "db2" },
+                { "custom", "db3", "db3" },
+                { "custom", "db4", "db4" },
 
-                { "class", "dev", "test" },
-                { "class", "test", "test" },
-                { "class", "staging", "test" },
-                { "class", "prod", "test" },
+                { "class", "db1", "db2" },
+                { "class", "db2", "db2" },
+                { "class", "db3", "db2" },
+                { "class", "db4", "db2" },
 
-                { "package", "dev", "prod" },
-                { "package", "test", "prod" },
-                { "package", "staging", "prod" },
-                { "package", "prod", "prod" }
+                { "package", "db1", "db4" },
+                { "package", "db2", "db4" },
+                { "package", "db3", "db4" },
+                { "package", "db4", "db4" }
         };
     }
 
@@ -96,9 +97,9 @@ public class MultiDataSourceTests {
     @Before 
     public void init() {    
         mockMvc = MockMvcBuilders.webAppContextSetup(wac)   
-                	//.alwaysDo(print())
+                	.alwaysDo(print())
                     .alwaysExpect(status().is2xxSuccessful())
-                .build();
+                    .build();
     }
 
     @Test
@@ -109,5 +110,4 @@ public class MultiDataSourceTests {
                 .andExpect(handler().methodName(methodName))
                 .andExpect(jsonPath("$[0]").value(startsWith(dataSourceName + " dataSource")));
     }
-
 }

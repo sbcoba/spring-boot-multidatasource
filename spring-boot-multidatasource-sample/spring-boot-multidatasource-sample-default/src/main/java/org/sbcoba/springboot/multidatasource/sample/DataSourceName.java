@@ -9,19 +9,19 @@ package org.sbcoba.springboot.multidatasource.sample;
  */
 public final class DataSourceName {
     /**
-     * 개발 DataSource 명
+     * 첫번째 DB1
      */
-    public static final String DEV = "dev";
+    public static final String DB1 = "db1";
     /**
-     * 테스트 DataSource 명
+     * 두번째 DB2
      */
-    public static final String TEST ="test";
+    public static final String DB2 ="db2";
     /**
-     * 스테이징 DataSource 명
+     * 세번째 DB3
      */
-    public static final String STAGING = "staging";
+    public static final String DB3 = "db3";
     /**
-     * 운영 DataSource 명
+     * 네번째 DB4
      */
-    public static final String PROD = "prod";
+    public static final String DB4 = "db4";
 }

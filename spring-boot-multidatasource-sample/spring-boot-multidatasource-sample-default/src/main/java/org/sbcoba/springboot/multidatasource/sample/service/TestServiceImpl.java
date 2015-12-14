@@ -11,7 +11,7 @@ import java.util.List;
 
 /**
  * 디폴트 @DataSource 를 사용한다.
- * application.xml "spring.multi-datasource.default-datasource-name: dev" 속성의 영향
+ * application.xml "spring.multi-datasource.default-datasource-name:" 속성의 영향
  *
  * @see org.sbcoba.springboot.multidatasource.sample.service
  * @author sbcoba
@@ -25,25 +25,25 @@ public class TestServiceImpl implements TestService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<String> devNames() {
+    public List<String> db1Names() {
         return testDao.getNames();
     }
 
     @Override
     @Transactional(readOnly = true)
-    public List<String> testNames() {
+    public List<String> db2Names() {
         return testDao.getNames();
     }
 
     @Override
     @Transactional(readOnly = true)
-    public List<String> stagingNames() {
+    public List<String> db3Names() {
         return testDao.getNames();
     }
 
     @Override
     @Transactional(readOnly = true)
-    public List<String> prodNames() {
+    public List<String> db4Names() {
         return testDao.getNames();
     }
 }

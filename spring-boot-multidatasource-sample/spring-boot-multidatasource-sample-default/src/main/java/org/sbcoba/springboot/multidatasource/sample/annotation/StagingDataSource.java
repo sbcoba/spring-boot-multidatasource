@@ -4,8 +4,7 @@ import org.sbcoba.springboot.multidatasource.autoconfigure.DataSource;
 
 import java.lang.annotation.*;
 
-import static org.sbcoba.springboot.multidatasource.sample.DataSourceName.DEV;
-import static org.sbcoba.springboot.multidatasource.sample.DataSourceName.STAGING;
+import static org.sbcoba.springboot.multidatasource.sample.DataSourceName.DB3;
 /**
  * 스테이징용 DataSource
  *
@@ -14,6 +13,6 @@ import static org.sbcoba.springboot.multidatasource.sample.DataSourceName.STAGIN
 @Target({ElementType.PACKAGE, ElementType.METHOD, ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
-@DataSource(STAGING)
+@DataSource(DB3)
 public @interface StagingDataSource {
 }

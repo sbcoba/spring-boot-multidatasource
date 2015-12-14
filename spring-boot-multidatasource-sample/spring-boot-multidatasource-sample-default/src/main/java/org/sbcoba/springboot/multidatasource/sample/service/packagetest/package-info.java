@@ -4,7 +4,7 @@
  *
  * @author sbcoba
  */
-@DataSource(PROD)
+@DataSource(DB4)
 package org.sbcoba.springboot.multidatasource.sample.service.packagetest;
 
 import org.sbcoba.springboot.multidatasource.autoconfigure.DataSource;

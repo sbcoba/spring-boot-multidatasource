@@ -6,20 +6,20 @@ spring:
 
   multi-datasource:
     basePackages: org.sbcoba.springboot.multidatasource.sample.service
-    default-datasource-name: dev
+    default-datasource-name: db1
     datasources:
-      dev:
-        url: jdbc:h2:~/dev;
-        data: classpath:devData.sql
-      test:
-        url: jdbc:h2:~/test;
-        data: classpath:testData.sql
-      staging:
-        url: jdbc:h2:~/staging;
-        data: classpath:stagingData.sql
-      prod:
-        url: jdbc:h2:~/prod;
-        data: classpath:prodData.sql
+      db1:
+        url: jdbc:h2:~/db1;
+        data: classpath:db1Data.sql
+      db2:
+        url: jdbc:h2:~/db2;
+        data: classpath:db2Data.sql
+      db3:
+        url: jdbc:h2:~/db3;
+        data: classpath:db3Data.sql
+      db4:
+        url: jdbc:h2:~/db4;
+        data: classpath:db4Data.sql
 
 logging:
   level:

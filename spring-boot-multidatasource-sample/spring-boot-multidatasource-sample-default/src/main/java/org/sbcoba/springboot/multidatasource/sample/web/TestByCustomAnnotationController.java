@@ -23,24 +23,24 @@ public class TestByCustomAnnotationController {
 	@Qualifier("custom")
 	private TestService testService;
 
-	@RequestMapping("dev")
-	public List<String> dev() {
-		return testService.devNames();
+	@RequestMapping("db1")
+	public List<String> db1() {
+		return testService.db1Names();
 	}
 
-	@RequestMapping("test")
-	public List<String> test() {
-		return testService.testNames();
+	@RequestMapping("db2")
+	public List<String> db2() {
+		return testService.db2Names();
 	}
 
-	@RequestMapping("staging")
-	public List<String> staging() {
-		return testService.stagingNames();
+	@RequestMapping("db3")
+	public List<String> db3() {
+		return testService.db3Names();
 	}
 
-	@RequestMapping("prod")
-	public List<String> prod() {
-		return testService.prodNames();
+	@RequestMapping("db4")
+	public List<String> db4() {
+		return testService.db4Names();
 	}
 
 }

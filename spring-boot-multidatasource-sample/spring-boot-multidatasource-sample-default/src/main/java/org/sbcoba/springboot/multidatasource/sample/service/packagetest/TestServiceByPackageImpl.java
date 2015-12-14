@@ -24,25 +24,25 @@ public class TestServiceByPackageImpl implements TestService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<String> devNames() {
+    public List<String> db1Names() {
         return testDao.getNames();
     }
 
     @Override
     @Transactional(readOnly = true)
-    public List<String> testNames() {
+    public List<String> db2Names() {
         return testDao.getNames();
     }
 
     @Override
     @Transactional(readOnly = true)
-    public List<String> stagingNames() {
+    public List<String> db3Names() {
         return testDao.getNames();
     }
 
     @Override
     @Transactional(readOnly = true)
-    public List<String> prodNames() {
+    public List<String> db4Names() {
         return testDao.getNames();
     }
 }

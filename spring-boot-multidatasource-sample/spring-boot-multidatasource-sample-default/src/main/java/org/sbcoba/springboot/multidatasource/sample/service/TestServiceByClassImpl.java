@@ -9,8 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-import static org.sbcoba.springboot.multidatasource.sample.DataSourceName.DEV;
-import static org.sbcoba.springboot.multidatasource.sample.DataSourceName.TEST;
+import static org.sbcoba.springboot.multidatasource.sample.DataSourceName.DB2;
 
 /**
  * Class 위에 @DataSource 어노테이션 사용으로
@@ -19,7 +18,7 @@ import static org.sbcoba.springboot.multidatasource.sample.DataSourceName.TEST;
  * @author sbcoba
  */
 @Service
-@DataSource(TEST)
+@DataSource(DB2)
 @Qualifier("class")
 public class TestServiceByClassImpl implements TestService {
 
@@ -28,25 +27,25 @@ public class TestServiceByClassImpl implements TestService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<String> devNames() {
+    public List<String> db1Names() {
         return testDao.getNames();
     }
 
     @Override
     @Transactional(readOnly = true)
-    public List<String> testNames() {
+    public List<String> db2Names() {
         return testDao.getNames();
     }
 
     @Override
     @Transactional(readOnly = true)
-    public List<String> stagingNames() {
+    public List<String> db3Names() {
         return testDao.getNames();
     }
 
     @Override
     @Transactional(readOnly = true)
-    public List<String> prodNames() {
+    public List<String> db4Names() {
         return testDao.getNames();
     }
 }

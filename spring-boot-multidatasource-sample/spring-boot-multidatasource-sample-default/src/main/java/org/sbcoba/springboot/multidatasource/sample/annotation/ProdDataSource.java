@@ -4,8 +4,7 @@ import org.sbcoba.springboot.multidatasource.autoconfigure.DataSource;
 
 import java.lang.annotation.*;
 
-import static org.sbcoba.springboot.multidatasource.sample.DataSourceName.DEV;
-import static org.sbcoba.springboot.multidatasource.sample.DataSourceName.PROD;
+import static org.sbcoba.springboot.multidatasource.sample.DataSourceName.DB4;
 
 /**
  * 운영용 DataSource
@@ -15,6 +14,6 @@ import static org.sbcoba.springboot.multidatasource.sample.DataSourceName.PROD;
 @Target({ElementType.PACKAGE, ElementType.METHOD, ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
-@DataSource(PROD)
+@DataSource(DB4)
 public @interface ProdDataSource {
 }

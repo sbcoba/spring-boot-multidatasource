@@ -7,11 +7,11 @@ import java.util.List;
  * @author sbcoba
  */
 public interface TestService {
-    List<String> devNames();
+    List<String> db1Names();
 
-    List<String> testNames();
+    List<String> db2Names();
 
-    List<String> stagingNames();
+    List<String> db3Names();
 
-    List<String> prodNames();
+    List<String> db4Names();
 }
