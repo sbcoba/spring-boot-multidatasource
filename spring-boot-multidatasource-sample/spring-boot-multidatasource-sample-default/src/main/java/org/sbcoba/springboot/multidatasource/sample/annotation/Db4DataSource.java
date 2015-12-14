@@ -4,15 +4,16 @@ import org.sbcoba.springboot.multidatasource.autoconfigure.DataSource;
 
 import java.lang.annotation.*;
 
-import static org.sbcoba.springboot.multidatasource.sample.DataSourceName.DB2;
+import static org.sbcoba.springboot.multidatasource.sample.DataSourceName.DB4;
+
 /**
- * 테스트용 DataSource
+ * DB4 DataSource
  *
  * @author sbcoba
  */
 @Target({ElementType.PACKAGE, ElementType.METHOD, ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
-@DataSource(DB2)
-public @interface TestDataSource {
+@DataSource(DB4)
+public @interface Db4DataSource {
 }

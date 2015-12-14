@@ -7,7 +7,7 @@ import java.lang.annotation.*;
 import static org.sbcoba.springboot.multidatasource.sample.DataSourceName.DB1;
 
 /**
- * 개발용 DataSource
+ * DB1 DataSource
  *
  * @author sbcoba
  */
@@ -15,5 +15,5 @@ import static org.sbcoba.springboot.multidatasource.sample.DataSourceName.DB1;
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 @DataSource(DB1)
-public @interface DevDataSource {
+public @interface Db1DataSource {
 }
