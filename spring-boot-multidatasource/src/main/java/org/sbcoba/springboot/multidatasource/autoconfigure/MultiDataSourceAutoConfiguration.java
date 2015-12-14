@@ -17,7 +17,6 @@ import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
-import org.springframework.boot.autoconfigure.jdbc.DataSourceBuilder;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.ApplicationContext;
@@ -42,6 +41,7 @@ import java.util.Map;
 @ConditionalOnProperty(prefix = "spring.multiDatasource", name = "enabled", havingValue = "true", matchIfMissing = true)
 @EnableAspectJAutoProxy(proxyTargetClass = true)
 @AutoConfigureAfter(DataSourceAutoConfiguration.class)
+@Import(MultiDataSourceRegistrar.class)
 @Configuration
 public class MultiDataSourceAutoConfiguration {
 	private static final Logger log = LoggerFactory.getLogger(MultiDataSourceAutoConfiguration.class);
@@ -56,33 +56,19 @@ public class MultiDataSourceAutoConfiguration {
     @Primary
     @ConditionalOnMissingBean(AbstractRoutingDataSource.class)
     public javax.sql.DataSource routeDataSource() {
-        MultiRoutingDataSource routingDataSource = new MultiRoutingDataSource();
-
         Map<String, DataSourceSet> targetDataSourceSet = new HashMap<String, DataSourceSet>();
-        Map<String, DataSourceProperties> dataSourceProperties = multiDataSourceProperties.getDatasources();
-        for (Map.Entry<String, DataSourceProperties> entry : dataSourceProperties.entrySet()) {
+        Map<String, DataSourceProperties> dataSourceProperties =
+                multiDataSourceProperties.getDatasources();
+        Map<String, javax.sql.DataSource> dataSourceMap =
+                BeanFactoryUtils.beansOfTypeIncludingAncestors(applicationContext,  javax.sql.DataSource.class);
+        for (Map.Entry<String, javax.sql.DataSource> entry : dataSourceMap.entrySet()) {
             String datasourceName = entry.getKey();
-            DataSourceProperties properties = entry.getValue();
-            DataSourceBuilder factory = DataSourceBuilder
-                    .create(properties.getClassLoader())
-                    .driverClassName(properties.getDriverClassName())
-                    .url(properties.getUrl()).username(properties.getUsername())
-                    .password(properties.getPassword());
-            if (properties.getType() != null) {
-                factory.type(properties.getType());
-            }
-            javax.sql.DataSource dataSource = factory.build();
-            targetDataSourceSet.put(datasourceName, new DataSourceSet(dataSource, properties));
-        }
-
-        if (targetDataSourceSet.size() == 0) {
-            Map<String,  javax.sql.DataSource> dataSourceMap = BeanFactoryUtils.beansOfTypeIncludingAncestors(applicationContext,  javax.sql.DataSource.class);
-            for (Map.Entry<String,  javax.sql.DataSource> entry : dataSourceMap.entrySet()) {
-                targetDataSourceSet.put(entry.getKey(), new DataSourceSet(entry.getValue()));
-            }
+            targetDataSourceSet.put(datasourceName,
+                    new DataSourceSet(entry.getValue(), dataSourceProperties.get(datasourceName)));
         }
         Assert.isTrue(targetDataSourceSet.size() != 0, "Datasource not found");
 
+        MultiRoutingDataSource routingDataSource = new MultiRoutingDataSource();
         routingDataSource.setTargetDataSourceSet(targetDataSourceSet);
         routingDataSource.setDefaultTargetDataSource(getDefaultTargetDatasource(targetDataSourceSet));
         return routingDataSource;
@@ -91,12 +77,11 @@ public class MultiDataSourceAutoConfiguration {
     private Object getDefaultTargetDatasource(Map<String, DataSourceSet> targetDataSourceSet) {
         String datasourceName = multiDataSourceProperties.getDefaultDatasourceName();
         if (!StringUtils.hasText(datasourceName)) {
-            datasourceName = targetDataSourceSet.keySet().toArray()[0].toString();
+            datasourceName = multiDataSourceProperties.getDatasources().keySet().toArray(new String[]{})[0];
         }
         DataSourceSet dataSourceSet = targetDataSourceSet.get(datasourceName);
-        if (dataSourceSet == null) {
-            return null;
-        }
+        Assert.notNull(dataSourceSet, "DataSource ("+ datasourceName + ") is not found!");
+        log.info("Default DataSource : {}", datasourceName);
         return dataSourceSet.getDataSource();
     }
 

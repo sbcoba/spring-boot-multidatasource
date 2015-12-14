@@ -52,6 +52,10 @@ class MultiDataSourceInitializer implements ApplicationListener<MultiDataSourceI
             DataSourceSet dataSourceSet = entry.getValue();
             DataSource dataSource = dataSourceSet.getDataSource();
             DataSourceProperties dataSourceProperties = dataSourceSet.getDataSourceProperties();
+            if (dataSourceProperties == null) {
+                // ignore
+                continue;
+            }
             if (!dataSourceProperties.isInitialize()) {
                 log.debug("Initialization disabled (not running DDL scripts)");
                 continue;
