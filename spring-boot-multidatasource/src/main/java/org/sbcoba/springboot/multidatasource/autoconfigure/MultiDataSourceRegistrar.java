@@ -1,6 +1,9 @@
 package org.sbcoba.springboot.multidatasource.autoconfigure;
 
 import org.springframework.beans.factory.BeanCreationException;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.support.AbstractBeanDefinition;
+import org.springframework.beans.factory.support.AutowireCandidateQualifier;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
@@ -28,7 +31,14 @@ public class MultiDataSourceRegistrar implements ImportBeanDefinitionRegistrar, 
 
     @Override
     public void registerBeanDefinitions(AnnotationMetadata importingClassMetadata, BeanDefinitionRegistry registry) {
-        MultiDataSourceProperties multiDataSourceProperties = getMultiDataSourceProperties();
+
+        ConfigurationProperties annotation =
+                AnnotationUtils.findAnnotation(MultiDataSourceProperties.class, ConfigurationProperties.class);
+        String prefix = StringUtils.hasText(annotation.value()) ? annotation.value() : annotation.prefix();
+
+        MultiDataSourceProperties multiDataSourceProperties = new MultiDataSourceProperties();
+        MultiDataSourceRegistrar.bindProperties(multiDataSourceProperties, prefix, environment);
+
         Map<String, DataSourceProperties> dataSourceProperties = multiDataSourceProperties.getDatasources();
         for (Map.Entry<String, DataSourceProperties> entry : dataSourceProperties.entrySet()) {
             String datasourceName = entry.getKey();
@@ -38,22 +48,21 @@ public class MultiDataSourceRegistrar implements ImportBeanDefinitionRegistrar, 
                     .addPropertyValue("driverClassName", properties.getDriverClassName())
                     .addPropertyValue("url", properties.getUrl())
                     .addPropertyValue("username", properties.getUsername())
-                    .addPropertyValue("password", properties.getPassword());
+                    .addPropertyValue("password", properties.getPassword())
+                    .addPropertyValue("environment", environment)
+                    .addPropertyValue("environmentPrefix", prefix + ".datasources." + datasourceName);
             if (properties.getType() != null) {
                 bdb.addPropertyValue("type", properties.getType());
             }
-            registry.registerBeanDefinition(datasourceName, bdb.getBeanDefinition());
+            AbstractBeanDefinition beanDefinition = bdb.getBeanDefinition();
+            beanDefinition.addQualifier(new AutowireCandidateQualifier(Qualifier.class, datasourceName));
+            registry.registerBeanDefinition(datasourceName, beanDefinition);
         }
     }
 
-    private MultiDataSourceProperties getMultiDataSourceProperties() {
-        MultiDataSourceProperties multiDataSourceProperties = new MultiDataSourceProperties();
-        PropertiesConfigurationFactory<MultiDataSourceProperties> factory =
-                new PropertiesConfigurationFactory<MultiDataSourceProperties>(multiDataSourceProperties);
+    static <T> T bindProperties(T t, String prefix, Environment environment) {
+        PropertiesConfigurationFactory<T> factory = new PropertiesConfigurationFactory<T>(t);
         factory.setConversionService(new DefaultConversionService());
-        ConfigurationProperties annotation =
-                AnnotationUtils.findAnnotation(MultiDataSourceProperties.class, ConfigurationProperties.class);
-        String prefix = StringUtils.hasText(annotation.value()) ? annotation.value() : annotation.prefix();
         factory.setTargetName(prefix);
 
         if (environment instanceof ConfigurableEnvironment) {
@@ -66,9 +75,9 @@ public class MultiDataSourceRegistrar implements ImportBeanDefinitionRegistrar, 
             factory.bindPropertiesToTarget();
         } catch (BindException e) {
             throw new BeanCreationException("MultiDataSourceProperties", "Could not bind properties to "
-                    + MultiDataSourceProperties.class + " (" + annotation + ")", e);
+                    + t.getClass() + " (" + prefix + ")", e);
         }
-        return multiDataSourceProperties;
+        return t;
     }
 
     @Override

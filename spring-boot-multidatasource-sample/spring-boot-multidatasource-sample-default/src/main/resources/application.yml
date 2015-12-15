@@ -11,15 +11,19 @@ spring:
       db1:
         url: jdbc:h2:~/db1;
         data: classpath:db1Data.sql
+        validationQuery: select 1
       db2:
         url: jdbc:h2:~/db2;
         data: classpath:db2Data.sql
+        validationQuery: select 1
       db3:
         url: jdbc:h2:~/db3;
         data: classpath:db3Data.sql
+        validationQuery: select 1
       db4:
         url: jdbc:h2:~/db4;
         data: classpath:db4Data.sql
+        validationQuery: select 1
 
 logging:
   level:

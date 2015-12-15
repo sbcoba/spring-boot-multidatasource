@@ -17,9 +17,12 @@ import java.util.Map;
  *
  * @author sbcoba
  */
-@ConfigurationProperties("spring.multiDatasource")
+@ConfigurationProperties(MultiDataSourceProperties.PREFIX)
 public class MultiDataSourceProperties
         implements BeanClassLoaderAware, EnvironmentAware, InitializingBean {
+
+    public static final String PREFIX = "spring.multiDatasource";
+
     private List<String> basePackages = new ArrayList<String>();
     private String defaultDatasourceName;
     private Map<String, DataSourceProperties> datasources = new HashMap<String, DataSourceProperties>();

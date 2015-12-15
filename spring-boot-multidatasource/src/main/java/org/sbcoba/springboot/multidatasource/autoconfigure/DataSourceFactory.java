@@ -2,8 +2,11 @@ package org.sbcoba.springboot.multidatasource.autoconfigure;
 
 import org.springframework.beans.factory.FactoryBean;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceBuilder;
+import org.springframework.core.env.Environment;
 
 import javax.sql.DataSource;
+
+import static org.sbcoba.springboot.multidatasource.autoconfigure.MultiDataSourceRegistrar.*;
 
 /**
  * DataSourceBuilder를 랩핑하여 DateSource를 생성하는 FactoryBean
@@ -18,6 +21,10 @@ public class DataSourceFactory implements FactoryBean<javax.sql.DataSource> {
     private String username;
     private String password;
     private ClassLoader classLoader;
+
+    private Environment environment;
+    private String environmentPrefix;
+
 
     public DataSourceFactory() {
     }
@@ -46,6 +53,14 @@ public class DataSourceFactory implements FactoryBean<javax.sql.DataSource> {
         this.password = password;
     }
 
+    public void setEnvironment(Environment environment) {
+        this.environment = environment;
+    }
+
+    public void setEnvironmentPrefix(String environmentPrefix) {
+        this.environmentPrefix = environmentPrefix;
+    }
+
     @Override
     public DataSource getObject() throws Exception {
         DataSourceBuilder builder = DataSourceBuilder
@@ -57,7 +72,9 @@ public class DataSourceFactory implements FactoryBean<javax.sql.DataSource> {
         if (type != null) {
             builder.type(type);
         }
-        return builder.build();
+        DataSource dataSource = builder.build();
+        bindProperties(dataSource, environmentPrefix, environment);
+        return dataSource;
     }
 
     @Override
