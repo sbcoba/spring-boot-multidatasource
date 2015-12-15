@@ -12,8 +12,8 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 public @interface DataSource {
-	/**
-	 * @return datasource name
-	 */
-	String value();
+    /**
+     * @return datasource name
+     */
+    String value();
 }

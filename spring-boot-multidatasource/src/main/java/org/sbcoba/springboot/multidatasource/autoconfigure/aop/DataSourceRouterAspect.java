@@ -47,17 +47,17 @@ public class DataSourceRouterAspect implements Ordered {
             String currentDataSourceName = DataSourceNameContextHolder.getDataSourceName();
             String currentSettingDataSourceName = datasource.value();
             if (currentSettingDataSourceName != null &&
-            		!currentSettingDataSourceName.equals(currentDataSourceName)) {
+                    !currentSettingDataSourceName.equals(currentDataSourceName)) {
                 DataSourceNameContextHolder.setDataSourceName(currentSettingDataSourceName);
                 log.debug("'{}' change datasource", currentSettingDataSourceName);
             }
         }
         try {
-        	return point.proceed();
-		} finally {
-			DataSourceNameContextHolder.clear();
-			log.debug("Methods \"{}\" annotated with @Datasource is start", point.toLongString());
-		}
+            return point.proceed();
+        } finally {
+            DataSourceNameContextHolder.clear();
+            log.debug("Methods \"{}\" annotated with @Datasource is start", point.toLongString());
+        }
     }
 
     /**
@@ -72,7 +72,7 @@ public class DataSourceRouterAspect implements Ordered {
         DataSource dataSource = AnnotationUtils.findAnnotation(method, DataSource.class);
         if (dataSource == null) {
             dataSource = AnnotationUtils.findAnnotation(
-            		point.getTarget().getClass(), DataSource.class);
+                    point.getTarget().getClass(), DataSource.class);
         }
 
         if (dataSource == null) {

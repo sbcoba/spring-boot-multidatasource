@@ -44,7 +44,7 @@ import java.util.Map;
 @Import(MultiDataSourceRegistrar.class)
 @Configuration
 public class MultiDataSourceAutoConfiguration {
-	private static final Logger log = LoggerFactory.getLogger(MultiDataSourceAutoConfiguration.class);
+    private static final Logger log = LoggerFactory.getLogger(MultiDataSourceAutoConfiguration.class);
 
     @Autowired
     private ApplicationContext applicationContext;
