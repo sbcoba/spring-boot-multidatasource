@@ -18,13 +18,15 @@ import java.lang.reflect.Method;
  * @author sbcoba
  */
 public class DataSourceAdvice implements MethodInterceptor, Ordered {
-    private static final Logger log = LoggerFactory.getLogger(DataSourceAdvice.class);
+    private final Logger log = LoggerFactory.getLogger(DataSourceAdvice.class);
     private int order = 0;
 
     @Override
     public Object invoke(MethodInvocation invocation) throws Throwable {
         Method invocationMethod = invocation.getMethod();
-        log.debug("Methods \"{}\" annotated with @Datasource is start", invocationMethod.toString());
+        if(log.isDebugEnabled()) {
+            log.debug("Methods \"{}\" annotated with @Datasource is start", invocationMethod.toString());
+        }
         DataSource dataSource = findDataSourceAnnotation(invocationMethod, invocation.getThis().getClass());
         if (dataSource != null) {
             String currentDataSourceName = DataSourceNameContextHolder.getDataSourceName();
@@ -39,7 +41,9 @@ public class DataSourceAdvice implements MethodInterceptor, Ordered {
             return invocation.proceed();
         } finally {
             DataSourceNameContextHolder.clear();
-            log.debug("Methods \"{}\" annotated with @Datasource is end", invocationMethod.toString());
+            if(log.isDebugEnabled()) {
+                log.debug("Methods \"{}\" annotated with @Datasource is end", invocationMethod.toString());
+            }
         }
     }
 
@@ -52,29 +56,37 @@ public class DataSourceAdvice implements MethodInterceptor, Ordered {
      * @throws Throwable
      */
     private DataSource findDataSourceAnnotation(Method method, Class<?> targetClass) throws Throwable {
+        boolean isDebugEnabled = log.isDebugEnabled();
         DataSource dataSource;
         if ((dataSource = AnnotationUtils.findAnnotation(method, DataSource.class)) != null) {
-            log.debug("Method {}.{} has @DataSource(value={})", targetClass.getSimpleName(), method.getName(), dataSource.value());
+            if (isDebugEnabled) {
+                log.debug("Method {}.{} has @DataSource(value={})", targetClass.getSimpleName(), method.getName(), dataSource.value());
+            }
             return dataSource;
         }
 
         Method specificMethod = AopUtils.getMostSpecificMethod(method, targetClass);
         if ((dataSource = AnnotationUtils.findAnnotation(specificMethod, DataSource.class)) != null) {
-            log.debug("Specific Method {}.{} has @DataSource(value={})", targetClass.getSimpleName(), method.getName(), dataSource.value());
+            if (isDebugEnabled) {
+                log.debug("Specific Method {}.{} has @DataSource(value={})", targetClass.getSimpleName(), method.getName(), dataSource.value());
+            }
             return dataSource;
         }
 
         if ((dataSource = AnnotationUtils.findAnnotation(targetClass, DataSource.class)) != null) {
-            log.debug("Class {} has @DataSource(value={})", targetClass.getSimpleName(), dataSource.value());
+            if (isDebugEnabled) {
+                log.debug("Class {} has @DataSource(value={})", targetClass.getSimpleName(), dataSource.value());
+            }
             return dataSource;
         }
         if ((dataSource = AnnotationUtils.findAnnotation(targetClass.getPackage(), DataSource.class)) != null) {
-            log.debug("Package {} has @DataSource(value={})", targetClass.getPackage().toString(), dataSource.value());
+            if (isDebugEnabled) {
+                log.debug("Package {} has @DataSource(value={})", targetClass.getPackage().toString(), dataSource.value());
+            }
             return dataSource;
         }
         return null;
     }
-
 
     public void setOrder(int order) {
         this.order = order;

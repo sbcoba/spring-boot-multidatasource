@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 다중의 datasource 정보를 설정하기 위한
+ * 다중의 datasource 정보를 설정하기 위한 Properties
  *
  * @author sbcoba
  */

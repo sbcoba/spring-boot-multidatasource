@@ -23,6 +23,9 @@ import org.springframework.validation.BindException;
 import java.util.Map;
 
 /**
+ * properties로 부터 가져온 Multi DataSource DB 정보를 기초로
+ * DataSource 객체생성 후 Spring 컨테이너로 등록
+ *
  * @author sbcoba
  */
 public class MultiDataSourceRegistrar implements ImportBeanDefinitionRegistrar, EnvironmentAware {
@@ -60,6 +63,15 @@ public class MultiDataSourceRegistrar implements ImportBeanDefinitionRegistrar, 
         }
     }
 
+    /**
+     * 객체와 environment 정보를 Binding
+     *
+     * @param t Binding 대상 객체
+     * @param prefix environment 의 prefix
+     * @param environment Spring 에서 관리하는 환경정보 Bean
+     * @param <T> Binding 대상 타입
+     * @return Binding 완료된 객체
+     */
     static <T> T bindProperties(T t, String prefix, Environment environment) {
         PropertiesConfigurationFactory<T> factory = new PropertiesConfigurationFactory<T>(t);
         factory.setConversionService(new DefaultConversionService());
